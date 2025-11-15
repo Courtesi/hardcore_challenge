@@ -1,8 +1,10 @@
 services:
-  mc-hardcore:
-    build: .
+  hardcore_mc:
+    image: courtesi/hardcore_mc
+    environment:
+      - VERSION=latest
     volumes:
-      - ./data:/data
+      - ./data:/app
     ports:
       - "25565:25565"
     tty: true

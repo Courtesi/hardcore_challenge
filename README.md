@@ -8,47 +8,19 @@ Install the open source container service provider [Docker](https://docs.docker.
 
 ### Example: Installing Docker Engine on Ubuntu example from the [docs](https://docs.docker.com/engine/install/ubuntu/):
 
-First, remove any previous outdated installations of Docker.
-```bash
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
-```
-
-Second, set up Docker's ```apt``` repository.
-```bash
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-```
-
-Third, install Docker's latest packages.
-```bash
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-```
-
-And lastly, make sure Docker is working by running the ```hello-world``` image.
-```bash
-sudo docker run hello-world
-```
-
 You should get a message from the Docker container that your installation was completed successfully!
 
 ## Usage
 
 ### CLI
-To run the latest version (1.21.5), run:
+To run the latest version (1.21.10), run:
 ```bash
-docker run -d -it -p 25565:25565 courtesi/hardcore_mc
+docker run -d -p 25565:25565 -v ./data:/app -e VERSION=latest --name hardcore_mc -it courtesi/hardcore_mc
 ```
+
+You can now select the version of Minecraft you want to run with this hardcore challenge, yay! \
+Just include the environment variable VERSION=(your version # here) to set up your minecraft server! \
+Use latest for the latest version of minecraft.
 
 ### Docker Compose
 1. Create a new directory.
@@ -62,21 +34,41 @@ docker run -d -it -p 25565:25565 courtesi/hardcore_mc
 ```bash
 services:
   hardcore_mc:
-    image: courtesi/hardcore_mc
-    tty: true
-    stdin_open: true
+    image: courtesi/hardcore_mc 
+    environment:
+      - VERSION=latest # Change this to your desired version
+    volumes:
+      - ./data:/app
     ports:
       - "25565:25565"
-    volumes:
-      - ./data:/data
+    tty: true
+    stdin_open: true
 ```
+
+### To View Logs
+Use the command: 
+`docker logs -f hardcore_mc`
+
+
+### Using playit.gg
+You can also incorporate playit.gg into this docker container. \
+Sign up on [playit.gg](playit.gg), make an account and then set up your docker agent on their website. \
+They will give you a docker service that should like this:
+
+```bash
+playit:
+  image: ghcr.io/playit-cloud/playit-agent:0.16
+  network_mode: host
+  environment:
+    - SECRET_KEY=...
+```
+
+Pair this `playit` service with your `hardcore_mc` service to host a multiplayer server online without port forwarding!
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## Credit
 Thanks to Bloodimooni on GitHub for providing the ```hardcore.py``` file.
