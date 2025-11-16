@@ -46,17 +46,17 @@ To run the latest version (1.21.10), run:
 	```bash
 	docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
 	```
-  **Flag Explanations:**
-  - -d - Run in detached mode (background)
-	- -p 25565:25565 - Expose Minecraft server port
-	- -p 25575:25575 - Expose RCON port
-	- -v ./data:/app - Mount local ./data directory to /app in container for persistence
-	- -e VERSION=latest - Set Minecraft version (can be latest or specific like 1.21.1)
-	- -e RCON_PASSWORD=minecraft - Set RCON password for admin access
-	- -e RCON_PORT=25575 - Set RCON port (default: 25575)
-	- --name hardcore_mc - Give the container a friendly name
-	- -it - Interactive terminal (enables tty and stdin_open)
-	- courtesi/hardcore_mc - The Docker image to use
+**Flag Explanations:**
+- `-d` - Run in detached mode (background)
+- `-p 25565:25565` - Expose Minecraft server port
+- `-p 25575:25575` - Expose RCON port
+- `-v ./data:/app` - Mount local `./data` directory to `/app` in container for persistence
+- `-e VERSION=latest` - Set Minecraft version (can be `latest` or specific like `1.21.1`)
+- `-e RCON_PASSWORD=minecraft` - Set RCON password for admin access
+- `-e RCON_PORT=25575` - Set RCON port (default: 25575)
+- `--name hardcore_mc` - Give the container a friendly name
+- `-it` - Interactive terminal (enables tty and stdin_open)
+- `courtesi/hardcore_mc` - The Docker image to use
 
 ### Docker Compose
 1. Create a new directory (ex: `mkdir hardcore_challenge & cd hardcore_challenge`)
@@ -81,7 +81,7 @@ services:
       - "25565:25565"
       - "25575:25575"
     tty: true
-	stdin_open: true
+    stdin_open: true
 ```
 
 ### Using playit.gg
