@@ -15,40 +15,48 @@ Install the open source container service provider [Docker](https://docs.docker.
 
 ### RCON Administration
 
-  This image includes `rcon-cli` for remote administration of the Minecraft server while it's running.
+  This image includes `rcon-cli` for remote administration of the Minecraft server while it's running. \
 
-  #### Configuration
-
-  RCON is automatically enabled with configurable settings:
+  RCON is automatically enabled with configurable settings: \
 
   **Environment Variables:**
   - `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
   - `RCON_PORT` - Port for RCON (default: `25575`)
 
-  #### Usage
-
-  Interactive Mode: 
-  `docker exec -it hardcore_mc rcon-cli`
+  To use in interactive mode, type: `docker exec -it hardcore_mc rcon-cli`
 
   This opens an interactive session where you can type commands:
+  ```
   > say Hello everyone!
   > whitelist add PlayerName
   > op AdminName
   > list
   > exit
+  ```
 
   Single Command:
-  `docker exec hardcore_mc rcon-cli say Server restarting soon`
-  `docker exec hardcore_mc rcon-cli whitelist add NewPlayer`
+  `docker exec hardcore_mc rcon-cli say Server restarting soon` \
+  `docker exec hardcore_mc rcon-cli whitelist add NewPlayer` \
   `docker exec hardcore_mc rcon-cli op AdminUser`
 
 ## Using the image
 
 ### Docker Run
 To run the latest version (1.21.10), run:
-```bash
-docker run -d -p 25565:25565 -v ./data:/app -e VERSION=latest --name hardcore_mc -it courtesi/hardcore_mc
-```
+	```bash
+	docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
+	```
+	**Flag Explanations:**
+	- -d - Run in detached mode (background)
+	- -p 25565:25565 - Expose Minecraft server port
+	- -p 25575:25575 - Expose RCON port
+	- -v ./data:/app - Mount local ./data directory to /app in container for persistence
+	- -e VERSION=latest - Set Minecraft version (can be latest or specific like 1.21.1)
+	- -e RCON_PASSWORD=minecraft - Set RCON password for admin access
+	- -e RCON_PORT=25575 - Set RCON port (default: 25575)
+	- --name hardcore_mc - Give the container a friendly name
+	- -it - Interactive terminal (enables tty and stdin_open)
+	- courtesi/hardcore_mc - The Docker image to use
 
 ### Docker Compose
 1. Create a new directory (ex: `mkdir hardcore_challenge & cd hardcore_challenge`)
@@ -64,16 +72,16 @@ services:
   hardcore_mc:
     image: courtesi/hardcore_mc
     environment:
-      - VERSION=${VERSION:-latest}
-      - RCON_PASSWORD=${RCON_PASSWORD:-minecraft}
-      - RCON_PORT=${RCON_PORT:-25575}
+      - VERSION=latest
+      - RCON_PASSWORD=minecraft
+      - RCON_PORT=25575
     volumes:
       - ./data:/app
     ports:
       - "25565:25565"
       - "25575:25575"
     tty: true
-    stdin_open: true
+	stdin_open: true
 ```
 
 ### Using playit.gg
