@@ -1,4 +1,4 @@
-# Minecraft Hardcore Docker Container
+# Minecraft Multiplayer Hardcore Challenge Quick Start
 
 The purpose of this repository is to automate hardcore world regeneration on player death for a multiplayer server. One particular use case for this image would be to set up a hardcore challenge for a group of friends, where if one of the friends die, then the whole server will reset.
 
@@ -9,35 +9,36 @@ Install the open source container service provider [Docker](https://docs.docker.
 ## Features
 
 ### Versioning
-	You can now select the version of Minecraft you want to run with this hardcore challenge. 
-	Just include the environment variable `VERSION=(your version # here)` and the image will pull your specified version of minecraft at runtime.
-	Use `VERSION=latest` for the latest version of minecraft.
+
+You can now select the version of Minecraft you want to run with this hardcore challenge.
+Just include the environment variable `VERSION=(your version # here)` and the image will pull your specified version of minecraft at runtime.
+Use `VERSION=latest` for the latest version of minecraft.
 
 ### RCON Administration
 
-  This image includes `rcon-cli` for remote administration of the Minecraft server while it's running. \
+This image includes `rcon-cli` for remote administration of the Minecraft server while it's running. \
 
-  RCON is automatically enabled with configurable settings: \
+RCON is automatically enabled with configurable settings: \
 
-  **Environment Variables:**
-  - `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
-  - `RCON_PORT` - Port for RCON (default: `25575`)
+**Environment Variables:**
+- `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
+- `RCON_PORT` - Port for RCON (default: `25575`)
 
-  To use in interactive mode, type: `docker exec -it hardcore_mc rcon-cli`
+To use in interactive mode, type: `docker exec -it hardcore_mc rcon-cli`
 
-  This opens an interactive session where you can type commands:
-  ```
-  > say Hello everyone!
-  > whitelist add PlayerName
-  > op AdminName
-  > list
-  > exit
-  ```
+This opens an interactive session where you can type commands:
+```
+> say Hello everyone!
+> whitelist add PlayerName
+> op AdminName
+> list
+> exit
+```
 
-  Single Command:
-  `docker exec hardcore_mc rcon-cli say Server restarting soon` \
-  `docker exec hardcore_mc rcon-cli whitelist add NewPlayer` \
-  `docker exec hardcore_mc rcon-cli op AdminUser`
+Single Command:
+`docker exec hardcore_mc rcon-cli say Server restarting soon` \
+`docker exec hardcore_mc rcon-cli whitelist add NewPlayer` \
+`docker exec hardcore_mc rcon-cli op AdminUser`
 
 ## Using the image
 
