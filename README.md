@@ -1,4 +1,4 @@
-# Minecraft Multiplayer Hardcore Challenge Quick Start
+# Hardcore Challenge Quick Start
 
 The purpose of this repository is to automate hardcore world regeneration on player death for a multiplayer server. One particular use case for this image would be to set up a hardcore challenge for a group of friends, where if one of the friends die, then the whole server will reset.
 
@@ -18,14 +18,13 @@ Use `VERSION=latest` for the latest version of minecraft.
 
 This image includes `rcon-cli` for remote administration of the Minecraft server while it's running.
 
-RCON is automatically enabled with configurable settings:
-
 **Environment Variables:**
 - `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
 - `RCON_PORT` - Port for RCON (default: `25575`)
 
 **Interactive Mode:**
-Type: `docker exec -it hardcore_mc rcon-cli`
+
+Use `docker exec -it hardcore_mc rcon-cli` to open an interactive terminal:
 
 ```
 > say Hello everyone!
@@ -36,11 +35,14 @@ Type: `docker exec -it hardcore_mc rcon-cli`
 ```
 
 **Single command mode:**
+
 `docker exec hardcore_mc rcon-cli say Server restarting soon`
+
 `docker exec hardcore_mc rcon-cli whitelist add NewPlayer`
+
 `docker exec hardcore_mc rcon-cli op AdminUser`
 
-## Using the image
+## Usage
 
 ### Docker Run
 To run the latest version (1.21.10), run:
@@ -88,9 +90,7 @@ services:
 ```
 
 ### Using playit.gg
-You can also incorporate playit.gg into this docker compose. \
-Sign up on [playit.gg](https://playit.gg), make an account and then set up your docker agent on their website. \
-They will give you a docker service that should like this:
+If you don't want to port forward, you can also incorporate playit.gg into this docker compose. Sign up on [playit.gg](https://playit.gg), make an account and then set up your docker agent on their website. They will give you a docker service that should like this:
 
 ```bash
   playit:
