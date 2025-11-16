@@ -46,8 +46,8 @@ To run the latest version (1.21.10), run:
 	```bash
 	docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
 	```
-	**Flag Explanations:**
-	- -d - Run in detached mode (background)
+  **Flag Explanations:**
+  - -d - Run in detached mode (background)
 	- -p 25565:25565 - Expose Minecraft server port
 	- -p 25575:25575 - Expose RCON port
 	- -v ./data:/app - Mount local ./data directory to /app in container for persistence
