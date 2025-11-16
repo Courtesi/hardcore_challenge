@@ -10,23 +10,23 @@ Install the open source container service provider [Docker](https://docs.docker.
 
 ### Versioning
 
-You can now select the version of Minecraft you want to run with this hardcore challenge.
-Just include the environment variable `VERSION=(your version # here)` and the image will pull your specified version of minecraft at runtime.
+You can now select the version of Minecraft you want to run with this hardcore challenge.\
+Use `VERSION=(1.21.5)` to host a 1.21.5 minecraft multiplayer server.\
 Use `VERSION=latest` for the latest version of minecraft.
 
 ### RCON Administration
 
-This image includes `rcon-cli` for remote administration of the Minecraft server while it's running. \
+This image includes `rcon-cli` for remote administration of the Minecraft server while it's running.
 
-RCON is automatically enabled with configurable settings: \
+RCON is automatically enabled with configurable settings:
 
 **Environment Variables:**
 - `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
 - `RCON_PORT` - Port for RCON (default: `25575`)
 
-To use in interactive mode, type: `docker exec -it hardcore_mc rcon-cli`
+**Interactive Mode:**
+Type: `docker exec -it hardcore_mc rcon-cli`
 
-This opens an interactive session where you can type commands:
 ```
 > say Hello everyone!
 > whitelist add PlayerName
@@ -35,18 +35,20 @@ This opens an interactive session where you can type commands:
 > exit
 ```
 
-Single Command:
-`docker exec hardcore_mc rcon-cli say Server restarting soon` \
-`docker exec hardcore_mc rcon-cli whitelist add NewPlayer` \
+**Single command mode:**
+`docker exec hardcore_mc rcon-cli say Server restarting soon`
+`docker exec hardcore_mc rcon-cli whitelist add NewPlayer`
 `docker exec hardcore_mc rcon-cli op AdminUser`
 
 ## Using the image
 
 ### Docker Run
 To run the latest version (1.21.10), run:
-	```bash
-	docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
-	```
+```bash
+docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
+```
+
+
 **Flag Explanations:**
 - `-d` - Run in detached mode (background)
 - `-p 25565:25565` - Expose Minecraft server port
