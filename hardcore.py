@@ -104,15 +104,27 @@ def enable_hardcore_mode():
     hardcore_key = "hardcore=false"
     hardcore_new = "hardcore=true"
 
+    # Get RCON settings from environment variables
+    rcon_password = os.getenv("RCON_PASSWORD", "minecraft")
+    rcon_port = os.getenv("RCON_PORT", "25575")
+
     with open(file_path, "r") as input_file, open(temp_file_path, "w") as temp_file:
         for line in input_file:
-            if line.strip() == hardcore_key:
+            stripped = line.strip()
+            if stripped == hardcore_key:
                 line = hardcore_new + "\n"
+            elif stripped.startswith("enable-rcon="):
+                line = "enable-rcon=true\n"
+            elif stripped.startswith("rcon.password="):
+                line = f"rcon.password={rcon_password}\n"
+            elif stripped.startswith("rcon.port="):
+                line = f"rcon.port={rcon_port}\n"
             temp_file.write(line)
 
     # Replace the original file with the temporary file
     os.replace(temp_file_path, file_path)
     print(GREEN + "[+]\tHardcore has been enabled in the server properties." + RESET)
+    print(GREEN + "[+]\tRCON has been enabled in the server properties." + RESET)
 
 def check_eula_agreement():
     try:

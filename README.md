@@ -6,13 +6,45 @@ The purpose of this repository is to automate hardcore world regeneration on pla
 
 Install the open source container service provider [Docker](https://docs.docker.com/engine/install/).
 
-## Usage
+## Features
 
-### CLI
-You can now select the version of Minecraft you want to run with this hardcore challenge. 
-Just include the environment variable `VERSION=(your version # here)` and the image will pull your specified version of minecraft at runtime.
-Use `VERSION=latest` for the latest version of minecraft.
+### Versioning
+	You can now select the version of Minecraft you want to run with this hardcore challenge. 
+	Just include the environment variable `VERSION=(your version # here)` and the image will pull your specified version of minecraft at runtime.
+	Use `VERSION=latest` for the latest version of minecraft.
 
+### RCON Administration
+
+  This image includes `rcon-cli` for remote administration of the Minecraft server while it's running.
+
+  #### Configuration
+
+  RCON is automatically enabled with configurable settings:
+
+  **Environment Variables:**
+  - `RCON_PASSWORD` - Password for RCON access (default: `minecraft`)
+  - `RCON_PORT` - Port for RCON (default: `25575`)
+
+  #### Usage
+
+  Interactive Mode: 
+  `docker exec -it hardcore_mc rcon-cli`
+
+  This opens an interactive session where you can type commands:
+  > say Hello everyone!
+  > whitelist add PlayerName
+  > op AdminName
+  > list
+  > exit
+
+  Single Command:
+  `docker exec hardcore_mc rcon-cli say Server restarting soon`
+  `docker exec hardcore_mc rcon-cli whitelist add NewPlayer`
+  `docker exec hardcore_mc rcon-cli op AdminUser`
+
+## Using the image
+
+### Docker Run
 To run the latest version (1.21.10), run:
 ```bash
 docker run -d -p 25565:25565 -v ./data:/app -e VERSION=latest --name hardcore_mc -it courtesi/hardcore_mc
@@ -30,21 +62,19 @@ docker run -d -p 25565:25565 -v ./data:/app -e VERSION=latest --name hardcore_mc
 ```bash
 services:
   hardcore_mc:
-    image: courtesi/hardcore_mc 
+    image: courtesi/hardcore_mc
     environment:
-      - VERSION=latest # Change this to your desired version
+      - VERSION=${VERSION:-latest}
+      - RCON_PASSWORD=${RCON_PASSWORD:-minecraft}
+      - RCON_PORT=${RCON_PORT:-25575}
     volumes:
       - ./data:/app
     ports:
       - "25565:25565"
+      - "25575:25575"
     tty: true
     stdin_open: true
 ```
-
-### To View Logs
-Use the command: 
-`docker logs -f hardcore_mc`
-
 
 ### Using playit.gg
 You can also incorporate playit.gg into this docker compose. \
