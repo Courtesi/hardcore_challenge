@@ -1,12 +1,13 @@
 services:
-  hardcore_mc:
+  server:
     image: courtesi/hardcore_mc
     build:
       context: .
     environment:
-      - VERSION=${VERSION:-latest}
-      - RCON_PASSWORD=${RCON_PASSWORD:-minecraft}
-      - RCON_PORT=${RCON_PORT:-25575}
+      - VERSION=latest
+      - RCON_PASSWORD=minecraft
+      - RCON_PORT=25575
+      - EXTRA_COMMANDS_FILE=extra_commands.txt
     volumes:
       - ./data:/app
     ports:

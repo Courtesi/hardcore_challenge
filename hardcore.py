@@ -6,8 +6,10 @@ import os
 import sys
 import platform
 
+extra_commands_file = os.getenv("EXTRA_COMMANDS_FILE", "extra_commands.txt")
+
 def print_banner():
-    banner = """
+	banner = """
 ██████╗ ██╗      ██████╗  ██████╗ ██████╗ ██╗███╗   ███╗ ██████╗  ██████╗ ███╗   ██╗██╗
 ██╔══██╗██║     ██╔═══██╗██╔═══██╗██╔══██╗██║████╗ ████║██╔═══██╗██╔═══██╗████╗  ██║██║
 ██████╔╝██║     ██║   ██║██║   ██║██║  ██║██║██╔████╔██║██║   ██║██║   ██║██╔██╗ ██║██║
@@ -15,8 +17,8 @@ def print_banner():
 ██████╔╝███████╗╚██████╔╝╚██████╔╝██████╔╝██║██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██║ ╚████║██║
 ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═════╝ ╚═╝╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝
 """
-    print("\n"*100)
-    print(RED + "\tCreated by:\n" + banner + RESET)
+	# print("\n"*100)
+	print(RED + "\tCreated by:\n" + banner + RESET)
 
 ## Colors
 
@@ -30,233 +32,235 @@ FIRSTRUN = False
 operating_system = platform.system()
 
 allowed_death_entities = [
-    "Named entity class",
-    "entity class",
-    "class_1646",
-    "*"
+	"Named entity class",
+	"entity class",
+	"class_1646",
+	"*"
 ]
 
 death_messages = [
-    "died",
-    "drowned",
-    "death",
-    "experienced kinetic energy",
-    "intentional game design",
-    "blew up",
-    "pummeled",
-    "blown up",
-    "killed",
-    "hit the ground too hard",
-    "fell",
-    "left the confines of this world",
-    "squished",
-    "suffocated",
-    "was burnt",
-    "cactus",
-    "was slain",
-    "was shot",
-    "burned to death",
-    "tried to swim in lava",
-    "got melted by a blaze",
-    "failed to escape the Nether",
-    "fell out of the world",
-    "withered away",
-    "discovered the void",
-    "discovered the floor was lava",
-    "was doomed by the Wither",
-    "got struck by lightning",
-    "got caught in a trap",
-    "was pricked to death",
-    "got stung by a bee",
-    "was stung to death",
-    "stung",
-    "doomed to fall",
-    "starved to death",
-    "was doomed by a witch",
-    "fell into a ravine",
-    "was fireballed",
-    "was shot by a Skeleton",
-    "was blown off a cliff",
-    "got suffocated in a wall",
-    "was slain by a zombie",
-    "was struck by lightning",
-    "impaled",
-    "squashed",
-    "went up in flames",
-    "flames",
-    "didn't want to live",
-    "skewered",
-    "walked into fire",
-    "went off with a bang",
-    "walked into the danger zone",
-    "was killed by magic",
-    "froze to death",
-    "was fireballed",
-    "obliterated",
-    "starved"
+	"died",
+	"drowned",
+	"death",
+	"experienced kinetic energy",
+	"intentional game design",
+	"blew up",
+	"pummeled",
+	"blown up",
+	"killed",
+	"hit the ground too hard",
+	"fell",
+	"left the confines of this world",
+	"squished",
+	"suffocated",
+	"was burnt",
+	"cactus",
+	"was slain",
+	"was shot",
+	"burned to death",
+	"tried to swim in lava",
+	"got melted by a blaze",
+	"failed to escape the Nether",
+	"fell out of the world",
+	"withered away",
+	"discovered the void",
+	"discovered the floor was lava",
+	"was doomed by the Wither",
+	"got struck by lightning",
+	"got caught in a trap",
+	"was pricked to death",
+	"got stung by a bee",
+	"was stung to death",
+	"stung",
+	"doomed to fall",
+	"starved to death",
+	"was doomed by a witch",
+	"fell into a ravine",
+	"was fireballed",
+	"was shot by a Skeleton",
+	"was blown off a cliff",
+	"got suffocated in a wall",
+	"was slain by a zombie",
+	"was struck by lightning",
+	"impaled",
+	"squashed",
+	"went up in flames",
+	"flames",
+	"didn't want to live",
+	"skewered",
+	"walked into fire",
+	"went off with a bang",
+	"walked into the danger zone",
+	"was killed by magic",
+	"froze to death",
+	"was fireballed",
+	"obliterated",
+	"starved"
 ]
 
 # RIP Manu, he died for testing purposes
 
 def enable_hardcore_mode():
-    file_path = "server.properties"
-    temp_file_path = "temp.properties"
-    hardcore_key = "hardcore=false"
-    hardcore_new = "hardcore=true"
+	file_path = "server.properties"
+	temp_file_path = "temp.properties"
+	hardcore_key = "hardcore=false"
+	hardcore_new = "hardcore=true"
 
-    # Get RCON settings from environment variables
-    rcon_password = os.getenv("RCON_PASSWORD", "minecraft")
-    rcon_port = os.getenv("RCON_PORT", "25575")
+	# Get RCON settings from environment variables
+	rcon_password = os.getenv("RCON_PASSWORD", "minecraft")
+	rcon_port = os.getenv("RCON_PORT", "25575")
 
-    with open(file_path, "r") as input_file, open(temp_file_path, "w") as temp_file:
-        for line in input_file:
-            stripped = line.strip()
-            if stripped == hardcore_key:
-                line = hardcore_new + "\n"
-            elif stripped.startswith("enable-rcon="):
-                line = "enable-rcon=true\n"
-            elif stripped.startswith("rcon.password="):
-                line = f"rcon.password={rcon_password}\n"
-            elif stripped.startswith("rcon.port="):
-                line = f"rcon.port={rcon_port}\n"
-            temp_file.write(line)
+	with open(file_path, "r") as input_file, open(temp_file_path, "w") as temp_file:
+		for line in input_file:
+			stripped = line.strip()
+			if stripped == hardcore_key:
+				line = hardcore_new + "\n"
+			elif stripped.startswith("enable-rcon="):
+				line = "enable-rcon=true\n"
+			elif stripped.startswith("rcon.password="):
+				line = f"rcon.password={rcon_password}\n"
+			elif stripped.startswith("rcon.port="):
+				line = f"rcon.port={rcon_port}\n"
+			elif stripped.startswith("spawn-protection="):
+				line = "spawn-protection=0\n"
+			temp_file.write(line)
 
-    # Replace the original file with the temporary file
-    os.replace(temp_file_path, file_path)
-    print(GREEN + "[+]\tHardcore has been enabled in the server properties." + RESET)
-    print(GREEN + "[+]\tRCON has been enabled in the server properties." + RESET)
+	# Replace the original file with the temporary file
+	os.replace(temp_file_path, file_path)
+	print(GREEN + "[+]\tHardcore has been enabled in the server properties." + RESET)
+	print(GREEN + "[+]\tRCON has been enabled in the server properties." + RESET)
 
 def check_eula_agreement():
-    try:
-        with open("eula.txt", "r") as file:
-            for line in file:
-                if line.strip() == "eula=true":
-                    return True
-        return False
-    except FileNotFoundError:
-        return False
+	try:
+		with open("eula.txt", "r") as file:
+			for line in file:
+				if line.strip() == "eula=true":
+					return True
+		return False
+	except FileNotFoundError:
+		return False
 
 
 def check_and_create_run_file(operating_system):
-    if operating_system == "Linux":
-        run_file_path = "./run.sh"
-        run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
-    elif operating_system == "Windows":
-        run_file_path = "run.bat"
-        run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
-    elif operating_system == "Darwin":
-        run_file_path = "./run.sh"
-        run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
-    else:
-        print(RED + "[!]\tUnsupported operating system." + RESET)
-        return
+	if operating_system == "Linux":
+		run_file_path = "./run.sh"
+		run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
+	elif operating_system == "Windows":
+		run_file_path = "run.bat"
+		run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
+	elif operating_system == "Darwin":
+		run_file_path = "./run.sh"
+		run_file_content = "java -Xmx2048M -Xms1024M -jar server.jar nogui"
+	else:
+		print(RED + "[!]\tUnsupported operating system." + RESET)
+		return
 
-    try:
-        with open(run_file_path, "r"):
-            # Run file exists, no need to create
-            return
-    except FileNotFoundError:
-        # Run file does not exist, create it
-        with open(run_file_path, "w") as run_file:
-            run_file.write(run_file_content)
-        print(GREEN + f"[+]\t{run_file_path} created successfully." + RESET)
+	try:
+		with open(run_file_path, "r"):
+			# Run file exists, no need to create
+			return
+	except FileNotFoundError:
+		# Run file does not exist, create it
+		with open(run_file_path, "w") as run_file:
+			run_file.write(run_file_content)
+		print(GREEN + f"[+]\t{run_file_path} created successfully." + RESET)
 
 def sum_of_deaths(deaths : dict):
-    attempt_number = 1
-    for i in deaths:
-        attempt_number += deaths[i]
-    return attempt_number
+	attempt_number = 1
+	for i in deaths:
+		attempt_number += deaths[i]
+	return attempt_number
 
 
 def read_stats_from_file():
-    stats = {}
-    try:
-        with open("stats","r") as file:
-            out = file.read().replace("{","").replace("}","").replace("'","").split(",")
-            for item in out:
-                item = item.strip()
-                key, value = item.split(":")
-                key = key.strip()
-                value = int(value.strip())
-                stats[key] = value
+	stats = {}
+	try:
+		with open("stats","r") as file:
+			out = file.read().replace("{","").replace("}","").replace("'","").split(",")
+			for item in out:
+				item = item.strip()
+				key, value = item.split(":")
+				key = key.strip()
+				value = int(value.strip())
+				stats[key] = value
 
-            return stats
+			return stats
 
-    except FileNotFoundError:
-        return stats
+	except FileNotFoundError:
+		return stats
 
 def save_stats_to_file(stats):
-    with open("stats","w") as file:
-        file.write(str(stats))
+	with open("stats","w") as file:
+		file.write(str(stats))
 
 def player_died(player):
-    print(RED + "[-]\tA player died" + RESET)
-    minecraft_process.stdin.write(f"say {player} died, the server will restart with a new world.\n")
-    minecraft_process.stdin.flush()
-    time.sleep(1)
-    print(RED + f"[-]\t{deaths}" + RESET)
-    minecraft_process.stdin.write(f"say Here are the stats: {deaths}\n")
-    minecraft_process.stdin.flush()
-    time.sleep(5)
-    return
+	print(RED + "[-]\tA player died" + RESET)
+	minecraft_process.stdin.write(f"say {player} died, the server will restart with a new world.\n")
+	minecraft_process.stdin.flush()
+	time.sleep(1)
+	print(RED + f"[-]\t{deaths}" + RESET)
+	minecraft_process.stdin.write(f"say Here are the stats: {deaths}\n")
+	minecraft_process.stdin.flush()
+	time.sleep(5)
+	return
 
 
 def line_contains_two_users(line):
-    user_line_list = []
-    for user in usernames:
-        if user in line:
-            user_line_list.append(user)
+	user_line_list = []
+	for user in usernames:
+		if user in line:
+			user_line_list.append(user)
 
-    if len(user_line_list) > 1:
-        return True
-    else:
-        return False
+	if len(user_line_list) > 1:
+		return True
+	else:
+		return False
 
 
 def check_player_death():
-        while True:
-            line = minecraft_process.stdout.readline()
-            out = line.replace("\n", "")
-            print(YELLOW + out + RESET)
-            if line.strip():
+		while True:
+			line = minecraft_process.stdout.readline()
+			out = line.replace("\n", "")
+			print(YELLOW + out + RESET)
+			if line.strip():
 
-                if any(username in line for username in usernames):
+				if any(username in line for username in usernames):
 
-                    if any(keyword in line for keyword in death_messages):
+					if any(keyword in line for keyword in death_messages):
 
-                        if not any(f"<{username}>" in line for username in usernames) \
-                            and not any(death_entities in line for death_entities in allowed_death_entities):
+						if not any(f"<{username}>" in line for username in usernames) \
+							and not any(death_entities in line for death_entities in allowed_death_entities):
 
-                            for user in usernames:
-                                if line.__contains__(user) == True:
-                                    if line_contains_two_users(line) == True:
-                                        line = line.split(" was")
-                                        line = line[0].split(": ")
-                                        dead_player = line[1]
-                                    else:
-                                        dead_player = user
+							for user in usernames:
+								if line.__contains__(user) == True:
+									if line_contains_two_users(line) == True:
+										line = line.split(" was")
+										line = line[0].split(": ")
+										dead_player = line[1]
+									else:
+										dead_player = user
 
-                                    if dead_player in deaths:
-                                        deaths[f"{dead_player}"] += 1
-                                        print(RED + f"\n\n[!]\t{dead_player} got added a death to their counter" + RESET)
-                                    else:
-                                        deaths[f"{dead_player}"] = 1
-                                    player_died(dead_player)
-                                    return
+									if dead_player in deaths:
+										deaths[f"{dead_player}"] += 1
+										print(RED + f"\n\n[!]\t{dead_player} got added a death to their counter" + RESET)
+									else:
+										deaths[f"{dead_player}"] = 1
+									player_died(dead_player)
+									return
 
-                                else:
-                                    continue
+								else:
+									continue
 
-                    elif "stats" in line.lower():
-                        print(GREEN + "[i]\tuser asked for stats, sending them" + RESET)
-                        minecraft_process.stdin.write(f"say Attempt {attempt_number}: {str(deaths).replace('{','').replace('}','')}\n")
-                        minecraft_process.stdin.flush()
+					elif "stats" in line.lower():
+						print(GREEN + "[i]\tuser asked for stats, sending them" + RESET)
+						minecraft_process.stdin.write(f"say Attempt {attempt_number}: {str(deaths).replace('{','').replace('}','')}\n")
+						minecraft_process.stdin.flush()
 
-                elif " logged in with entity id" in line:
-                    username = line.split("[")[2].split(": ")[1]
-                    if username not in usernames:
-                        usernames.append(username)
-                        print(BLUE + f"[!]\tUsername: {username} appended to internal list." + RESET)
+				elif " logged in with entity id" in line:
+					username = line.split("[")[2].split(": ")[1]
+					if username not in usernames:
+						usernames.append(username)
+						print(BLUE + f"[!]\tUsername: {username} appended to internal list." + RESET)
 
 
 ####    START   ####
@@ -273,73 +277,95 @@ time.sleep(2)
 check_and_create_run_file(operating_system)
 
 if check_eula_agreement() == False:
-    try:
-        os.system("rm eula.txt")
-    except:
-        pass
-    with open("eula.txt","w") as eula:
-        eula.write("eula=true")
+	try:
+		os.system("rm eula.txt")
+	except:
+		pass
+	with open("eula.txt","w") as eula:
+		eula.write("eula=true")
 
 try:
-    enable_hardcore_mode()
+	enable_hardcore_mode()
 except Exception:
-    print(RED + "[!]\tFirst run detected!")
-    FIRSTRUN = True
+	print(RED + "[!]\tFirst run detected!")
+	FIRSTRUN = True
 
 while True:
-    # Restart the Minecraft server
-    print(GREEN + "[+]\tStarting minecraft server\n\n\n" + RESET)
+	# Restart the Minecraft server
+	print(GREEN + "[+]\tStarting minecraft server\n\n\n" + RESET)
 
-    # Determine the operating system
-    if operating_system == "Linux":
-        minecraft_command = ["/bin/bash", "./run.sh"]
-        delete_command = "rm -rf world/ world_the_end/ world_nether/"
+	# Determine the operating system
+	if operating_system == "Linux":
+		minecraft_command = ["/bin/bash", "./run.sh"]
+		delete_command = "rm -rf world/ world_the_end/ world_nether/"
 
-    elif operating_system == "Windows":
-        minecraft_command = ["run.bat"]
-        delete_command = "rmdir /s /q world"
+	elif operating_system == "Windows":
+		minecraft_command = ["run.bat"]
+		delete_command = "rmdir /s /q world world_nether world_the_end"
 
-    elif operating_system == "Darwin":
-        minecraft_command = ["/bin/bash", "./run.sh"]
-        delete_command = "rm -rf world/"
+	elif operating_system == "Darwin":
+		minecraft_command = ["/bin/bash", "./run.sh"]
+		delete_command = "rm -rf world/"
 
-    else:
-        print(RED + "[!]\tUnsupported operating system." + RESET)
-        sys.exit(1)
+	else:
+		print(RED + "[!]\tUnsupported operating system." + RESET)
+		sys.exit(1)
 
-    minecraft_process = subprocess.Popen(minecraft_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
-    time.sleep(3)
-    print(BLUE + "[SERVER@localhost]\tLooking for deaths now" + RESET)
+	minecraft_process = subprocess.Popen(minecraft_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+	time.sleep(3)
+	
+	if FIRSTRUN:
+		print(f"{BLUE} [i]\tFirst run detected! {RESET} Enabling hardcore mode and setting extra commands.")
 
-    # Wait for a player to die
-    try:
-        minecraft_process.stdin.write("scoreboard objectives add health health\n")
-        minecraft_process.stdin.flush()
+		# Make sure file exists
+		if os.path.exists(extra_commands_file):
+			counter = 1
+			with open(extra_commands_file, "r") as file:
+				for line in file:
+					# If line is empty, skip it
+					if not line.strip():
+						continue
+					print(f"this is line {counter}: {line}")
+					minecraft_process.stdin.write(line)
+					minecraft_process.stdin.flush()
+		
+		minecraft_process.stdin.write("stop\n")
+		minecraft_process.stdin.flush()
+		minecraft_process.wait()
 
-        minecraft_process.stdin.write("scoreboard objectives setdisplay list health\n")
-        minecraft_process.stdin.flush()
-        check_player_death()
-    except KeyboardInterrupt:
-        print("\n\n" + RED + "[-]\tKeyboardInterrupt: Stopping server..." + RESET)
-        minecraft_process.stdin.write("stop\n")
-        minecraft_process.stdin.flush()
-        time.sleep(5)
-        minecraft_process.wait()
-        sys.exit(0)
+		enable_hardcore_mode()
+		
+		os.system(delete_command)
+		time.sleep(1)
 
-    # Wait for the server to shut down
-    minecraft_process.stdin.write("stop\n")
-    minecraft_process.stdin.flush()
-    minecraft_process.wait()
-    print(BLUE + "[-]\tServer stopped." + RESET)
+		FIRSTRUN = False
+		continue
 
-    if FIRSTRUN == True:
-        enable_hardcore_mode()
-        FIRSTRUN = False
+	# Wait for a player to die
+	print(BLUE + "[SERVER@localhost]\tLooking for deaths now" + RESET)
+	try:
+		check_player_death()
+	except KeyboardInterrupt:
+		print("\n\n" + RED + "[-]\tKeyboardInterrupt: Stopping server..." + RESET)
+		minecraft_process.stdin.write("stop\n")
+		minecraft_process.stdin.flush()
+		time.sleep(5)
+		minecraft_process.wait()
+		sys.exit(0)
 
-    # Delete the world directory
-    os.system(delete_command)
-    print(RED + "[!]\tDirectory 'world' deleted." + RESET)
-    save_stats_to_file(deaths)
-    print(RED + f"[i]\tSaved all the stats to file." + RESET)
-    time.sleep(1)
+	# Wait for the server to shut down
+	minecraft_process.stdin.write("stop\n")
+	minecraft_process.stdin.flush()
+	minecraft_process.wait()
+	print(BLUE + "[-]\tServer stopped." + RESET)
+
+	# if FIRSTRUN == True:
+	# 	enable_hardcore_mode()
+	# 	FIRSTRUN = False
+
+	# Delete the world directory
+	os.system(delete_command)
+	print(RED + "[!]\tDirectory 'world' deleted." + RESET)
+	save_stats_to_file(deaths)
+	print(RED + f"[i]\tSaved all the stats to file." + RESET)
+	time.sleep(1)
