@@ -25,8 +25,8 @@ This image includes `rcon-cli` for remote administration of the Minecraft server
 **Interactive Mode:**
 
 Enter interactive rcon by entering the command\
-Without password: `docker exec -it hardcore_mc rcon-cli`\
-With password: `docker exec -it hardcore_mc rcon-cli --password ${YOUR_PASSWORD_HERE}`
+Without password: `docker exec -it server rcon-cli`\
+With password: `docker exec -it server rcon-cli --password ${YOUR_PASSWORD_HERE}`
 
 which opens an interactive terminal:
 
@@ -40,20 +40,24 @@ which opens an interactive terminal:
 
 **Single command mode:**
 
-`docker exec hardcore_mc rcon-cli say Server restarting soon`
+`docker exec server rcon-cli say Server restarting soon`
 
-`docker exec hardcore_mc rcon-cli --password ${YOUR_PASSWORD_HERE} whitelist add NewPlayer`
+`docker exec server rcon-cli --password ${YOUR_PASSWORD_HERE} whitelist add NewPlayer`
 
 ### Extra Commands File
 
 You can specify a text file to run extra commands at the first run of your Minecraft server. These should be persistent and QoL commands for your server.
+
+### Reset Time (seconds)
+
+You can also specify how long you want the server to wait before the reset after every player death in seconds. Default is 5 seconds.
 
 ## Usage
 
 ### Docker Run
 To run the latest version (1.21.10), run:
 ```bash
-docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 -e EXTRA_COMMANDS_FILE=extra_commands.txt --name hardcore_mc -it courtesi/hardcore_mc
+docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 -e EXTRA_COMMANDS_FILE=extra_commands.txt -e RESET_TIME=30 --name server -it courtesi/hardcore_mc
 ```
 
 
@@ -66,7 +70,8 @@ docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e 
 - `-e RCON_PASSWORD=minecraft` - Set RCON password for admin access
 - `-e RCON_PORT=25575` - Set RCON port (default: 25575)
 - `-e EXTRA_COMMANDS_FILE=extra_commands.txt` - Identify extra commands file for hardcore.py to run
-- `--name hardcore_mc` - Give the container a friendly name
+- `-e RESET_TIME=30` - Specifies the amount of seconds to wait after player death before resetting server
+- `--name server` - Give the container a friendly name
 - `-it` - Interactive terminal (enables tty and stdin_open)
 - `courtesi/hardcore_mc` - The Docker image to use
 
@@ -81,13 +86,14 @@ docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e 
 
 ```bash
 services:
-  hardcore_mc:
+  server:
     image: courtesi/hardcore_mc
     environment:
       - VERSION=latest
       - RCON_PASSWORD=minecraft
       - RCON_PORT=25575
 	  - EXTRA_COMMANDS_FILE=extra_commands.txt
+	  - RESET_TIME=30
     volumes:
       - ./data:/app
     ports:
@@ -108,7 +114,7 @@ If you don't want to port forward, you can also incorporate playit.gg into this 
 	- SECRET_KEY=...
 ```
 
-Pair this `playit` service with your `hardcore_mc` service to host a hardcore multiplayer server online without port forwarding!
+Pair this `playit` service with your `server` service to host a hardcore multiplayer server online without port forwarding!
 
 ## Contributing
 

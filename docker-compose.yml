@@ -8,6 +8,7 @@ services:
       - RCON_PASSWORD=minecraft
       - RCON_PORT=25575
       - EXTRA_COMMANDS_FILE=extra_commands.txt
+      - RESET_TIME=30
     volumes:
       - ./data:/app
     ports:

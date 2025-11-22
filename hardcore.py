@@ -7,6 +7,10 @@ import sys
 import platform
 
 extra_commands_file = os.getenv("EXTRA_COMMANDS_FILE", "extra_commands.txt")
+try:
+	reset_time = int(os.getenv("RESET_TIME", 5))
+except:
+	reset_time = 5
 
 def print_banner():
 	banner = """
@@ -201,7 +205,7 @@ def player_died(player):
 	print(RED + f"[-]\t{deaths}" + RESET)
 	minecraft_process.stdin.write(f"say Here are the stats: {deaths}\n")
 	minecraft_process.stdin.flush()
-	time.sleep(5)
+	time.sleep(reset_time)
 	return
 
 
