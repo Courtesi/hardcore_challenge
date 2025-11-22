@@ -25,8 +25,8 @@ This image includes `rcon-cli` for remote administration of the Minecraft server
 **Interactive Mode:**
 
 Enter interactive rcon by entering the command\
-Without password: `docker exec -it server rcon-cli`\
-With password: `docker exec -it server rcon-cli --password ${YOUR_PASSWORD_HERE}`
+Without password: `docker exec -it minecraft-server-1 rcon-cli`\
+With password: `docker exec -it minecraft-server-1 rcon-cli --password ${YOUR_PASSWORD_HERE}`
 
 which opens an interactive terminal:
 
@@ -40,9 +40,9 @@ which opens an interactive terminal:
 
 **Single command mode:**
 
-`docker exec server rcon-cli say Server restarting soon`
+`docker exec minecraft-server-1 rcon-cli say Server restarting soon`
 
-`docker exec server rcon-cli --password ${YOUR_PASSWORD_HERE} whitelist add NewPlayer`
+`docker exec minecraft-server-1 rcon-cli --password ${YOUR_PASSWORD_HERE} whitelist add NewPlayer`
 
 ### Extra Commands File
 
