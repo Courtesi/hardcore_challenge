@@ -44,12 +44,16 @@ which opens an interactive terminal:
 
 `docker exec hardcore_mc rcon-cli --password ${YOUR_PASSWORD_HERE} whitelist add NewPlayer`
 
+### Extra Commands File
+
+You can specify a text file to run extra commands at the first run of your Minecraft server. These should be persistent and QoL commands for your server.
+
 ## Usage
 
 ### Docker Run
 To run the latest version (1.21.10), run:
 ```bash
-docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 --name hardcore_mc -it courtesi/hardcore_mc
+docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e RCON_PASSWORD=minecraft -e RCON_PORT=25575 -e EXTRA_COMMANDS_FILE=extra_commands.txt --name hardcore_mc -it courtesi/hardcore_mc
 ```
 
 
@@ -61,6 +65,7 @@ docker run -d -p 25565:25565 -p 25575:25575 -v ./data:/app -e VERSION=latest -e 
 - `-e VERSION=latest` - Set Minecraft version (can be `latest` or specific like `1.21.1`)
 - `-e RCON_PASSWORD=minecraft` - Set RCON password for admin access
 - `-e RCON_PORT=25575` - Set RCON port (default: 25575)
+- `-e EXTRA_COMMANDS_FILE=extra_commands.txt` - Identify extra commands file for hardcore.py to run
 - `--name hardcore_mc` - Give the container a friendly name
 - `-it` - Interactive terminal (enables tty and stdin_open)
 - `courtesi/hardcore_mc` - The Docker image to use
@@ -82,6 +87,7 @@ services:
       - VERSION=latest
       - RCON_PASSWORD=minecraft
       - RCON_PORT=25575
+	  - EXTRA_COMMANDS_FILE=extra_commands.txt
     volumes:
       - ./data:/app
     ports:
